@@ -20,15 +20,15 @@ export default async function DashboardPage() {
         .eq('id', user.id)
         .single();
 
-    // Fetch today's logs
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Fetch logs for client-side filtering (fetch last 48h to handle timezone differences)
+    const queryDate = new Date();
+    queryDate.setDate(queryDate.getDate() - 2); // Go back 2 days to be safe
 
     const { data: todayLogs } = await supabase
         .from('cigarette_logs')
         .select('*')
         .eq('user_id', user.id)
-        .gte('logged_at', today.toISOString())
+        .gte('logged_at', queryDate.toISOString())
         .order('logged_at', { ascending: false });
 
     // Fetch last 7 days for trend

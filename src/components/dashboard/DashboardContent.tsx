@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useLoggingStore } from '@/stores';
+import { isSameDay } from 'date-fns';
 import type { User } from '@supabase/supabase-js';
 import type { Profile, CigaretteLog } from '@/types';
 import styles from './Dashboard.module.css';
@@ -29,9 +30,13 @@ export default function DashboardContent({
     const { todayLogs, setTodayLogs, addLog } = useLoggingStore();
     const [greeting, setGreeting] = useState('');
 
-    // Initialize logs from server
+    // Initialize logs from server with client-side date filtering
     useEffect(() => {
-        setTodayLogs(initialTodayLogs);
+        const now = new Date();
+        const filteredLogs = initialTodayLogs.filter(log => 
+            isSameDay(new Date(log.logged_at), now)
+        );
+        setTodayLogs(filteredLogs);
     }, [initialTodayLogs, setTodayLogs]);
 
     // Set personalized greeting and handle day change
