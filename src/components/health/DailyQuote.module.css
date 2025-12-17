@@ -1,0 +1,88 @@
+.container {
+    position: relative;
+    padding: var(--space-6);
+    background: linear-gradient(135deg, var(--bg-elevated) 0%, rgba(168, 85, 247, 0.05) 100%);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 160px;
+}
+
+.decoration {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+[data-theme='dark'] .decoration {
+    opacity: 0.1;
+}
+
+.quoteIcon {
+    transform: rotate(180deg);
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.fadeIn {
+    opacity: 1;
+}
+
+.fadeOut {
+    opacity: 0;
+}
+
+.text {
+    font-size: var(--text-lg);
+    font-weight: var(--font-medium);
+    font-style: italic;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: 1.5;
+}
+
+.author {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.refreshBtn {
+    position: absolute;
+    bottom: var(--space-3);
+    right: var(--space-3);
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+    border: none;
+    border-radius: var(--radius-full);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    opacity: 0;
+}
+
+.container:hover .refreshBtn {
+    opacity: 1;
+}
+
+.refreshBtn:hover {
+    background: var(--primary-500);
+    color: white;
+    transform: rotate(180deg);
+}

@@ -1,0 +1,205 @@
+.fabContainer {
+    position: fixed;
+    bottom: 100px;
+    /* Clear the bottom nav (70px + spacing) */
+    right: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    z-index: var(--z-fab);
+}
+
+.fab {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+}
+
+.fab:hover:not(:disabled) {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl), 0 0 30px rgb(6 182 212 / 0.5);
+}
+
+.fab:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.fab:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.fabIcon {
+    font-size: 1.75rem;
+}
+
+.fabSuccess {
+    background: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
+    animation: scaleIn var(--transition-base) ease-out;
+}
+
+.successIcon {
+    font-size: 1.75rem;
+    color: white;
+}
+
+.delayBtn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    font-size: 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+.delayBtn:hover {
+    transform: scale(1.1);
+    border-color: var(--primary-500);
+}
+
+/* Expanded Form Overlay */
+.expandedOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: var(--space-4);
+    animation: fadeIn var(--transition-fast) ease-out;
+}
+
+.expandedCard {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: var(--space-6);
+    animation: slideUp var(--transition-base) ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.expandedTitle {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.section {
+    margin-bottom: var(--space-5);
+}
+
+.sectionLabel {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+}
+
+.optionGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.optionBtn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    font-size: var(--text-sm);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.optionBtn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--primary-500);
+}
+
+.optionBtn.optionActive {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: var(--primary-500);
+    color: var(--primary-400);
+}
+
+.expandedActions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-default);
+}
+
+.cancelBtn {
+    flex: 1;
+    border-radius: 999px;
+    height: 48px;
+    font-weight: 600;
+}
+
+.logBtn {
+    flex: 2;
+    border-radius: 999px;
+    height: 48px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .fabContainer {
+        bottom: 90px;
+        right: var(--space-4);
+    }
+
+    .fab {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .fabIcon {
+        font-size: 1.5rem;
+    }
+
+    .expandedCard {
+        padding: var(--space-5);
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+}
