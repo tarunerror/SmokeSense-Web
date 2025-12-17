@@ -34,19 +34,47 @@ export default function DashboardContent({
         setTodayLogs(initialTodayLogs);
     }, [initialTodayLogs, setTodayLogs]);
 
-    // Set personalized greeting
+    // Set personalized greeting and handle day change
     useEffect(() => {
-        const hour = new Date().getHours();
-        const name = profile?.display_name || user.email?.split('@')[0] || 'there';
+        const checkTime = () => {
+            const now = new Date();
+            const hour = now.getHours();
+            const name = profile?.display_name || user.email?.split('@')[0] || 'there';
 
-        if (hour < 12) {
-            setGreeting(`Good morning, ${name}`);
-        } else if (hour < 17) {
-            setGreeting(`Good afternoon, ${name}`);
-        } else {
-            setGreeting(`Good evening, ${name}`);
-        }
-    }, [profile, user.email]);
+            // Greeting
+            if (hour < 12) {
+                setGreeting(`Good morning, ${name}`);
+            } else if (hour < 17) {
+                setGreeting(`Good afternoon, ${name}`);
+            } else {
+                setGreeting(`Good evening, ${name}`);
+            }
+
+            // Check if day has changed (Midnight Reset)
+            const lastLogDate = todayLogs.length > 0 ? new Date(todayLogs[0].logged_at) : new Date();
+            const isDifferentDay = lastLogDate.getDate() !== now.getDate() ||
+                lastLogDate.getMonth() !== now.getMonth() ||
+                lastLogDate.getFullYear() !== now.getFullYear();
+
+            // If we have logs displayed but they are not from today, refresh
+            if (todayLogs.length > 0 && isDifferentDay) {
+                // Determine if the *latest* log in our "todayLogs" state is actually from yesterday
+                // We double check to avoid infinite loops if todayLogs is just empty
+                const hasStaleLogs = todayLogs.some(log => {
+                    const d = new Date(log.logged_at);
+                    return d.getDate() !== now.getDate();
+                });
+
+                if (hasStaleLogs) {
+                    window.location.reload(); // Force full reload to ensure server data is fresh
+                }
+            }
+        };
+
+        checkTime();
+        const interval = setInterval(checkTime, 60000); // Check every minute
+        return () => clearInterval(interval);
+    }, [profile, user.email, todayLogs]);
 
     // Real-time subscription for logs
     useEffect(() => {
