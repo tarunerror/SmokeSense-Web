@@ -39,7 +39,8 @@ export default async function DashboardPage() {
         .from('cigarette_logs')
         .select('logged_at')
         .eq('user_id', user.id)
-        .gte('logged_at', weekAgo.toISOString());
+        .gte('logged_at', weekAgo.toISOString())
+        .order('logged_at', { ascending: false });
 
     return (
         <DashboardContent

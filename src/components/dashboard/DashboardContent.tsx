@@ -49,32 +49,45 @@ export default function DashboardContent({
             } else {
                 setGreeting(`Good evening, ${name}`);
             }
-
-            // Check if day has changed (Midnight Reset)
-            const lastLogDate = todayLogs.length > 0 ? new Date(todayLogs[0].logged_at) : new Date();
-            const isDifferentDay = lastLogDate.getDate() !== now.getDate() ||
-                lastLogDate.getMonth() !== now.getMonth() ||
-                lastLogDate.getFullYear() !== now.getFullYear();
-
-            // If we have logs displayed but they are not from today, refresh
-            if (todayLogs.length > 0 && isDifferentDay) {
-                // Determine if the *latest* log in our "todayLogs" state is actually from yesterday
-                // We double check to avoid infinite loops if todayLogs is just empty
-                const hasStaleLogs = todayLogs.some(log => {
-                    const d = new Date(log.logged_at);
-                    return d.getDate() !== now.getDate();
-                });
-
-                if (hasStaleLogs) {
-                    window.location.reload(); // Force full reload to ensure server data is fresh
-                }
-            }
         };
 
         checkTime();
         const interval = setInterval(checkTime, 60000); // Check every minute
         return () => clearInterval(interval);
-    }, [profile, user.email, todayLogs]);
+    }, [profile, user.email]);
+
+    // Separate effect for day change detection to avoid unnecessary checks
+    useEffect(() => {
+        const checkDayChange = () => {
+            if (todayLogs.length === 0) return;
+
+            const now = new Date();
+            const lastLog = new Date(todayLogs[0].logged_at);
+            
+            // Check if the most recent log is from a different day
+            const isDifferentDay = 
+                lastLog.getDate() !== now.getDate() ||
+                lastLog.getMonth() !== now.getMonth() ||
+                lastLog.getFullYear() !== now.getFullYear();
+
+            if (isDifferentDay) {
+                // Clear today's logs and refresh
+                setTodayLogs([]);
+                window.location.reload();
+            }
+        };
+
+        // Check at midnight
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 1, 0); // 1 second after midnight
+        
+        const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+        const midnightTimer = setTimeout(checkDayChange, timeUntilMidnight);
+
+        return () => clearTimeout(midnightTimer);
+    }, [todayLogs, setTodayLogs]);
 
     // Real-time subscription for logs
     useEffect(() => {

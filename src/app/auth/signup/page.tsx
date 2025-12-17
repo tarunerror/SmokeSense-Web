@@ -65,8 +65,9 @@ export default function SignupPage() {
                     router.refresh();
                 }, 1500);
             }
-        } catch {
-            setError('An unexpected error occurred');
+        } catch (err) {
+            console.error('Signup error:', err);
+            setError('An unexpected error occurred. Please try again.');
         } finally {
             setLoading(false);
         }

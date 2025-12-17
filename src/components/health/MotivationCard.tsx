@@ -97,9 +97,21 @@ export default function MotivationCard() {
                 </div>
 
                 <div className={styles.editForm}>
-                    <div className={styles.imageUpload} onClick={triggerFileSelect}>
+                    <div 
+                        className={styles.imageUpload} 
+                        onClick={triggerFileSelect}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                triggerFileSelect();
+                            }
+                        }}
+                        aria-label="Upload motivation image"
+                    >
                         {image ? (
-                            <img src={image} alt="Motivation" className={styles.previewImage} />
+                            <img src={image} alt="Your motivation image" className={styles.previewImage} />
                         ) : (
                             <div className={styles.uploadPlaceholder}>
                                 <ImageIcon size={32} />
@@ -112,6 +124,7 @@ export default function MotivationCard() {
                             onChange={handleImageUpload}
                             accept="image/*"
                             hidden
+                            aria-label="Select motivation image file"
                         />
                     </div>
 
